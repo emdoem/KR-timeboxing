@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {v4 as uuidv4} from "uuid";
 
+import Clock from "./components/Clock"
+
 function TimeboxEditor(props) {
     const { 
             title, 
@@ -41,19 +43,7 @@ function TimeboxEditor(props) {
     
 }
 
-function Clock({ className = "", minutes = 7, seconds = 0 }) {
-    // here making sure the numbers display as double digits
-    let minutesDisplay = minutes.toString();
-    if (minutesDisplay.length < 2) {
-        minutesDisplay = '0' + minutesDisplay;
-    };
-    let secondsDisplay = seconds.toString();
-    if (secondsDisplay.length < 2) {
-        secondsDisplay = '0' + secondsDisplay;
-    };
-    
-    return <h2 className={"Clock " + className}>Pozostało {minutesDisplay}:{secondsDisplay}</h2>
-}
+
 
 function ProgressBar({ className = "", percent = 33, timeLeft = 15*60, totalTime = 30*60 }) {
     // passing state variables into timeLeft/totalTime to make ProgressBar follow the timer
