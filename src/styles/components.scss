@@ -59,21 +59,22 @@ button {
     margin-bottom: 20px;
     padding: 5px;
     transform: scaleX(-1);
+
+    &--big {
+        height: 50px;
+    }
+    
+    &--color-purp {
+        border-color: darken(#6b5b95, 20);
+    }
+    
+    &__bar {
+        height: 100%;
+        background-color: #878f99;
+    }
+    
+    &--color-purp &__bar {
+        background-color: darken(#6b5b95, 20);
+    }
 }
 
-.progress--big {
-    height: 50px;
-}
-
-.progress--color-purp {
-    border-color: darken(#6b5b95, 20);
-}
-
-.progress__bar {
-    height: 100%;
-    background-color: #878f99;
-}
-
-.progress--color-purp .progress__bar {
-    background-color: darken(#6b5b95, 20);
-}
