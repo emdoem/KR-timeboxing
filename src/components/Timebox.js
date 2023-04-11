@@ -15,7 +15,7 @@ class Timebox extends React.Component {
     
     render () {
         const updatedTitle = this.updatedTitleInput.current;
-        const { title, totalTimeInMinutes, onDelete, onEdit } = this.props;
+        const { title, totalTimeInMinutes, onDelete } = this.props;
         return (
             <div 
                 className="Timebox"
