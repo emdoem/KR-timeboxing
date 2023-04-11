@@ -79,6 +79,8 @@ class CurrentTimebox extends React.Component {
                     className={isPaused ? "inactive" : ""} 
                     timeLeft={timeLeftInSeconds} 
                     totalTime={totalTimeInSeconds} 
+                    color="purp"
+                    big
                 />          
                 <button onClick={onEdit} disabled={isEditable}>Edytuj</button>
                 <button onClick={this.handleStart} disabled={isRunning}>Start</button>
