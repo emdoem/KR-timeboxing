@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from "classnames";
 
 function ProgressBar({ 
     className = "", 
@@ -8,14 +9,16 @@ function ProgressBar({
     color = null, 
     big = false
 }) {
-    let progressClassName = "progress " + className;
-    if(big) {
-        progressClassName += " progress--big"
-    };
-    if(color === "purp") {
-        progressClassName += " progress--color-purp"
-    };
-    // passing state variables into timeLeft/totalTime to make ProgressBar follow the timer
+    let progressClassName = classNames(
+        "progress",
+        className,
+        {
+            "progress--big": big,
+            "progress--color-red": color === "red"
+        }
+    );
+    // try building className using: progressClassName = ['progress','progress--big'].join(' ');
+    // below: passing state variables into timeLeft/totalTime to make ProgressBar follow the timer
     percent = timeLeft/totalTime*100;
     return (
         <div className={progressClassName}>
