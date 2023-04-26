@@ -12,10 +12,15 @@ class Timebox extends React.Component {
         });
         this.updatedTitleInput.current.value = "";
     }
+
+    
     
     render () {
         const updatedTitle = this.updatedTitleInput.current;
         const { title, totalTimeInMinutes, onDelete } = this.props;
+        if (totalTimeInMinutes <= 0) {
+            throw new Error("Całkowity czas musi być większy niż zero!");
+        };
         return (
             <div 
                 className="Timebox"

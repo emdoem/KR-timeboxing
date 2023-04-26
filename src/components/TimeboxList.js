@@ -2,6 +2,9 @@ import React from 'react';
 
 import TimeboxCreator from "./TimeboxCreator";
 import Timebox from "./Timebox";
+import Error from "./Error";
+
+
 class TimeboxList extends React.Component {
     state = {
         timeboxes: [
@@ -9,9 +12,12 @@ class TimeboxList extends React.Component {
             { title: "Uczę się formularzy", totalTimeInMinutes: 15 },
             { title: "Uczę się srutututu", totalTimeInMinutes: 5 },
             { title: "Uczę się życia", totalTimeInMinutes: 2 }
-        ]
+        ],
+        hasError: false
     }       
     
+    
+
     addTimebox = (timebox) => {
         this.setState(prevState => {
             const timeboxes = [timebox, ...prevState.timeboxes];
@@ -38,27 +44,39 @@ class TimeboxList extends React.Component {
     }
 
     handleCreate = (createdTimebox) => {
-        this.addTimebox(createdTimebox)
+        try {
+            this.addTimebox(createdTimebox);
+        } catch (error) {
+            console.log("Wystąpił błąd przy tworzeniu timeboxa: ", error);
+        }
     }
 
     render () {
+        console.table(this.state.timeboxes);
         return (
             <>
                 <TimeboxCreator onCreate={this.handleCreate} />
-                {this.state.timeboxes.map((timebox, index) => (
-                    <Timebox 
-                        key={timebox.id} 
-                        title={timebox.title} 
-                        totalTimeInMinutes={timebox.totalTimeInMinutes} 
-                        onDelete={() => this.removeTimebox(index)}
-                        onEdit={(updatedTimebox) => {
-                            this.updateTimebox(index, {
-                                ...timebox, 
-                                title: updatedTimebox.updatedTitle
-                            });
-                        }}
-                    />
-                ))}
+                <Error message="Coś się wykrzaczyło w liście :(">
+                { 
+                   this.state.timeboxes.map((timebox, index) => (
+                       <Error message="Coś się wykrzaczyło w timeboksie :(">
+                       <Timebox 
+                           key={timebox.id} 
+                           title={timebox.title} 
+                           totalTimeInMinutes={timebox.totalTimeInMinutes} 
+                           onDelete={() => this.removeTimebox(index)}
+                           onEdit={(updatedTimebox) => {
+                               this.updateTimebox(index, {
+                                   ...timebox, 
+                                   title: updatedTimebox.updatedTitle
+                               });
+                           }}
+                       />
+                       </Error>
+                   ))
+                }
+                </Error>
+                
                                  
             </>
         )

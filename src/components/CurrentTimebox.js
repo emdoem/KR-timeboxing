@@ -5,6 +5,7 @@ import ProgressBar from "./ProgressBar";
 class CurrentTimebox extends React.Component {
     constructor(props) {
         super(props);
+        console.count("constructor");
         this.state = {
             isRunning: false,
             isPaused: false,
@@ -14,6 +15,20 @@ class CurrentTimebox extends React.Component {
         this.handleStart = this.handleStart.bind(this)
         this.handleStop = this.handleStop.bind(this)
         this.togglePause = this.togglePause.bind(this)
+        this.intervalId = null
+    }
+    componentWillMount() {
+        console.count("componentWillMount");
+    }
+    componentDidMount() {
+        console.count("componentDidMount");
+    }
+    componentDidUpdate() {
+        console.count("componentDidUpdate");
+    }
+    componentWillUnmount() {
+        console.count("componentWillUnmount");
+        this.stopTimer();
     }
     handleStart(event) {
         this.setState({
@@ -31,21 +46,27 @@ class CurrentTimebox extends React.Component {
         this.stopTimer();
     }
     startTimer() {
-        this.intervalId = window.setInterval(
-            () => {
-                this.setState(
-                    (prevState) => ({ elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1})
-                )
-            },
-            100
-        )
+        if (this.intervalId === null) {
+            this.intervalId = window.setInterval(
+                () => {
+                    console.log("timer is on");
+                    this.setState(
+                        (prevState) => ({ elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1})
+                    )
+                },
+                100
+            )
+        }
+        
     }
     stopTimer() {
         window.clearInterval(this.intervalId);
+        this.intervalId = null;
     }
     togglePause() {
         this.setState(
             function(prevState) {
+                console.count("setState");
                 const isPaused = !prevState.isPaused;
                 if (isPaused) {
                     this.stopTimer();
@@ -61,13 +82,14 @@ class CurrentTimebox extends React.Component {
     }
     //below: passing state into ProgressBar
     render() {
+        console.count("render");
         const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
         const { title, totalTimeInMinutes, isEditable, onEdit } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes*60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
         const minutesLeft = Math.floor(timeLeftInSeconds/60);
         const secondsLeft = Math.floor(timeLeftInSeconds%60);
-        return (
+                return (
             <div className={`CurrentTimebox ${isEditable ? "inactive" : ""}`}>
                 <h1>{title}</h1>
                 <Clock 
