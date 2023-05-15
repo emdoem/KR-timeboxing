@@ -17,11 +17,16 @@ function Clock({ className, minutes, seconds }) {
 Clock.defaultProps = {
     className: ""
 }
+function NonNegativeNumbersType(props, propName, componentName) {
+    if (props[propName] < 0) {
+        return new Error(`Invalid prop '${propName}' issued to component '${componentName}'. It can't be negative.`);
+    };
+};
 const NumberOrStringType = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
 Clock.propTypes = {
     className: PropTypes.string.isRequired, 
     minutes: NumberOrStringType.isRequired, 
-    seconds: NumberOrStringType.isRequired
+    seconds: NonNegativeNumbersType
 }
 
 export default Clock;
