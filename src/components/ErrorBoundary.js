@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 function ErrorMessage({ hasError, message, children }) {
     return hasError ? message : children;
@@ -26,6 +27,10 @@ class ErrorBoundary extends React.Component {
             />
         )
     }
+}
+ErrorBoundary.propTypes = {
+    message: PropTypes.string.isRequired,
+    children: PropTypes.any.isRequired
 }
 
 export default ErrorBoundary;
