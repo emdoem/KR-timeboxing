@@ -2,6 +2,8 @@ import React from 'react';
 
 import Clock from "./Clock";
 import ProgressBar from "./ProgressBar";
+import {getMinsAndSecsFromSecs} from "../lib/time";
+
 class CurrentTimebox extends React.Component {
     constructor(props) {
         super(props);
@@ -87,9 +89,9 @@ class CurrentTimebox extends React.Component {
         const { title, totalTimeInMinutes, isEditable, onEdit } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes*60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-        const minutesLeft = Math.floor(timeLeftInSeconds/60);
-        const secondsLeft = Math.floor(timeLeftInSeconds%60);
-                return (
+        
+        const [minutesLeft, secondsLeft] = getMinsAndSecsFromSecs(timeLeftInSeconds);
+        return (
             <div className={`CurrentTimebox ${isEditable ? "inactive" : ""}`}>
                 <h1>{title}</h1>
                 <Clock 
