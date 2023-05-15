@@ -4,7 +4,7 @@ function ErrorMessage({ hasError, message, children }) {
     return hasError ? message : children;
 }
 
-class Error extends React.Component {
+class ErrorBoundary extends React.Component {
     state = {
         hasError: false
     }
@@ -28,4 +28,4 @@ class Error extends React.Component {
     }
 }
 
-export default Error;
+export default ErrorBoundary;
