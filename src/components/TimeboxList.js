@@ -2,7 +2,7 @@ import React from 'react';
 
 import TimeboxCreator from "./TimeboxCreator";
 import Timebox from "./Timebox";
-import Error from "./Error";
+import Error from "./ErrorBoundary";
 
 
 class TimeboxList extends React.Component {

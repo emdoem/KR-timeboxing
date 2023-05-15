@@ -2,8 +2,8 @@ import React from 'react';
 
 import TimeboxList from "./TimeboxList"
 import EditableTimebox from './EditableTimebox';
-import Error from "./Error";
-import ErrorBoundary from './Error';
+import Error from "./ErrorBoundary";
+import ErrorBoundary from './ErrorBoundary';
 
 function App() {
     return (
