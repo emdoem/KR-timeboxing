@@ -3,18 +3,19 @@ import React from 'react';
 import TimeboxCreator from "./TimeboxCreator";
 import Timebox from "./Timebox";
 import Error from "./ErrorBoundary";
-import TimeboxesAPI from "../api/FakeTimeboxesAPI"
+import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 
-
+// insert custom URL in the call below:
+const TimeboxesAPI = createTimeboxesAPI();
 
 class TimeboxList extends React.Component {
     state = {
         timeboxes: [],
         loading: true,
         error: null
-    }   
-    
-    componentDidMount() {
+    }
+     
+        componentDidMount() {
         TimeboxesAPI.getAllTimeboxes().then(
             (timeboxes) => this.setState({ timeboxes })
         ).catch(
