@@ -3,44 +3,60 @@ import React from 'react';
 import TimeboxCreator from "./TimeboxCreator";
 import Timebox from "./Timebox";
 import Error from "./ErrorBoundary";
+import TimeboxesAPI from "../api/FakeTimeboxesAPI"
+
 
 
 class TimeboxList extends React.Component {
     state = {
-        timeboxes: [
-            { title: "Uczę się list", totalTimeInMinutes: 25 },
-            { title: "Uczę się formularzy", totalTimeInMinutes: 15 },
-            { title: "Uczę się srutututu", totalTimeInMinutes: 5 },
-            { title: "Uczę się życia", totalTimeInMinutes: 2 }
-        ],
-        hasError: false
-    }       
+        timeboxes: [],
+        loading: true,
+        error: null
+    }   
     
+    componentDidMount() {
+        TimeboxesAPI.getAllTimeboxes().then(
+            (timeboxes) => this.setState({ timeboxes })
+        ).catch(
+            (error) => this.setState({ error })
+        ).finally(
+            () => this.setState({loading: false})
+        )
+    }
     
-
     addTimebox = (timebox) => {
-        this.setState(prevState => {
-            const timeboxes = [timebox, ...prevState.timeboxes];
-            return { timeboxes };
-        })
+        TimeboxesAPI.addTimebox(timebox).then(
+           (addedTimebox) => this.setState(prevState => {
+                const timeboxes = [...prevState.timeboxes, addedTimebox];
+                return { timeboxes };
+            }
+        ) 
+        )
+        
     }
 
     removeTimebox = (indexToRemove)=> {
-        this.setState(prevState => {
-            const timeboxes = prevState.timeboxes.filter((timebox, index) => 
-                index !== indexToRemove
-            );
-            return { timeboxes };
-        })
+        TimeboxesAPI.removeTimebox(this.state.timeboxes[indexToRemove]).then(
+            () => this.setState(prevState => {
+                const timeboxes = prevState.timeboxes.filter((timebox, index) => 
+                    index !== indexToRemove
+                );
+                return { timeboxes };
+            })
+        )
     }
 
-    updateTimebox = (indexToUpdate, updatedTimebox) => {
-        this.setState(prevState => {
-            const timeboxes = prevState.timeboxes.map((timebox, index) =>
-                index === indexToUpdate ? updatedTimebox : timebox
-            );
-            return { timeboxes};
-        })
+    updateTimebox = (indexToUpdate, timeboxToUpdate) => {
+        TimeboxesAPI.replaceTimebox(timeboxToUpdate)
+            .then(
+                (updatedTimebox) => this.setState(prevState => {
+                    const timeboxes = prevState.timeboxes.map((timebox, index) =>
+                        index === indexToUpdate ? updatedTimebox : timebox
+                    );
+                    return { timeboxes };
+                })
+            )
+        
     }
 
     handleCreate = (createdTimebox) => {
@@ -56,6 +72,8 @@ class TimeboxList extends React.Component {
         return (
             <>
                 <TimeboxCreator onCreate={this.handleCreate} />
+                { this.state.loading ? "Timeboxy się ładują..." : null }
+                { this.state.error ? "Coś się wykrzaczyło w liście :(" : null}
                 <Error message="Coś się wykrzaczyło w liście :(">
                 { 
                    this.state.timeboxes.map((timebox, index) => (
