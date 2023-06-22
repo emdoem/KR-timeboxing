@@ -6,7 +6,7 @@ import Error from "./ErrorBoundary";
 import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 
 // insert custom URL in the call below:
-const TimeboxesAPI = createTimeboxesAPI();
+const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
 class TimeboxList extends React.Component {
     state = {
@@ -15,8 +15,8 @@ class TimeboxList extends React.Component {
         error: null
     }
      
-        componentDidMount() {
-        TimeboxesAPI.getAllTimeboxes().then(
+    componentDidMount() {
+        TimeboxesAPI.getAllTimeboxes(this.props.accessToken).then(
             (timeboxes) => this.setState({ timeboxes })
         ).catch(
             (error) => this.setState({ error })
@@ -26,7 +26,7 @@ class TimeboxList extends React.Component {
     }
     
     addTimebox = (timebox) => {
-        TimeboxesAPI.addTimebox(timebox).then(
+        TimeboxesAPI.addTimebox(timebox, this.props.accessToken).then(
            (addedTimebox) => this.setState(prevState => {
                 const timeboxes = [...prevState.timeboxes, addedTimebox];
                 return { timeboxes };
@@ -37,7 +37,7 @@ class TimeboxList extends React.Component {
     }
 
     removeTimebox = (indexToRemove)=> {
-        TimeboxesAPI.removeTimebox(this.state.timeboxes[indexToRemove]).then(
+        TimeboxesAPI.removeTimebox(this.state.timeboxes[indexToRemove], this.props.accessToken).then(
             () => this.setState(prevState => {
                 const timeboxes = prevState.timeboxes.filter((timebox, index) => 
                     index !== indexToRemove
@@ -48,7 +48,7 @@ class TimeboxList extends React.Component {
     }
 
     updateTimebox = (indexToUpdate, timeboxToUpdate) => {
-        TimeboxesAPI.replaceTimebox(timeboxToUpdate)
+        TimeboxesAPI.replaceTimebox(timeboxToUpdate, this.props.accessToken)
             .then(
                 (updatedTimebox) => this.setState(prevState => {
                     const timeboxes = prevState.timeboxes.map((timebox, index) =>
