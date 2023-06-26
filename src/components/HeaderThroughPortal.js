@@ -1,15 +1,18 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import UserGreeting from './UserGreeting';
 
+const headerRoot = document.getElementById("headerRoot");
 
 function Header({ onLogout }) {
-    return (
+    // console.log('DRUKUJ headerRoot', headerRoot);
+    return ReactDOM.createPortal(
         <header className="header">
             <UserGreeting />
 
             <a onClick={onLogout} className="header__logout-link" href="#">Wyloguj się</a>
         </header>
-        
+        , headerRoot
     );
 }
 
