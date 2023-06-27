@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
 import TimeboxList from "./TimeboxList"
-import EditableTimebox from './EditableTimebox';
+import EditableTimebox from './EditableTimeboxFunc';
 import InspirationalQuote from './InspirationalQuote';
 
 const headerRoot = document.getElementById("headerRoot");
@@ -11,7 +11,7 @@ function AuthenticatedApp({ onLogout }) {
     return (
         <>
             <Portal>
-                <Header onLogout={onLogout} />
+                <Header />
             </Portal>
             <TimeboxList />
             <EditableTimebox />

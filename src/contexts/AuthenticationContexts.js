@@ -1,15 +1,8 @@
 import React from 'react';
 
-const AuthenticationContext = React.createContext({ 
+const AuthenticationContext = React.createContext({
     accessToken: null,
-    /* this still needs work
-    handleLogout: function() {
-        this.setState({
-            accessToken: null,
-            previousLoginAttemptFailed: false
-        });
-    } 
-    */
+    handleLogout: null
 });
 
 export default AuthenticationContext;

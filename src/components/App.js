@@ -48,15 +48,20 @@ class App extends React.Component {
                 <ErrorBoundary message="Coś nie działa w całej aplikacji">
                     {
                         this.isUserLoggedIn() ?
-                            <AuthenticationContext.Provider value={ {accessToken: this.state.accessToken}}>
-                                { <React.Suspense fallback={"... Loading"}>
+                            <AuthenticationContext.Provider value={{
+                                accessToken: this.state.accessToken,
+                                handleLogout: this.handleLogout
+                            }}>
+                                {<React.Suspense fallback={"... Loading"}>
                                     <AuthenticatedApp
-                                        onLogout={this.handleLogout}
                                     />
-                                </React.Suspense> }
+                                </React.Suspense>}
                             </AuthenticationContext.Provider> :
                             <LoginForm
-                                errorMessage={this.state.previousLoginAttemptFailed ? "Nie udało się zalogować" : null}
+                                errorMessage={this.state.previousLoginAttemptFailed
+                                    ? "Nie udało się zalogować"
+                                    : null
+                                }
                                 onLoginAttempt={this.handleLoginAttempt}
                             />
                     }
