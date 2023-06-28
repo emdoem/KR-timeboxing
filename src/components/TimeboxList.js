@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TimeboxCreator from "./TimeboxCreator";
+import TimeboxCreator from "./TimeboxCreatorFunc";
 // import Timebox from "./Timebox";
 import Error from "./ErrorBoundary";
 import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
