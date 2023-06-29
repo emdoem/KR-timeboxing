@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import * as jose from "jose";
 import AuthenticationContext from '../contexts/AuthenticationContexts';
 
 function UserGreeting(props) {
+    const {accessToken} = useContext(AuthenticationContext);
     return (
-        <AuthenticationContext.Consumer>
-            {({accessToken}) => <>Witaj {getUserEmail(accessToken)}!</>}
-        </AuthenticationContext.Consumer>
+        <>Witaj {getUserEmail(accessToken)}!</>
     );
 }
 
