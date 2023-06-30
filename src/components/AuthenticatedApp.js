@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
-import TimeboxList from "./TimeboxList"
+import TimeboxManager from "./TimeboxManager"
 import EditableTimebox from './EditableTimeboxFunc';
 import InspirationalQuote from './InspirationalQuoteFunc';
 
@@ -13,7 +13,7 @@ function AuthenticatedApp({ onLogout }) {
             <Portal>
                 <Header />
             </Portal>
-            <TimeboxList />
+            <TimeboxManager />
             <EditableTimebox />
             <InspirationalQuote />
         </>
