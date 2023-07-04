@@ -7,6 +7,7 @@ import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { TimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
+import TimeboxEditor from './TimeboxEditor';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
@@ -16,6 +17,7 @@ const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 class TimeboxManager extends React.Component {
     state = {
         timeboxes: [],
+        editIndex: null,
         loading: true,
         error: null
     }
@@ -73,18 +75,30 @@ class TimeboxManager extends React.Component {
         }
     }
 
-    renderTimebox(timebox, index) {
-        return <Timebox
-            key={timebox.id}
-            title={timebox.title}
-            totalTimeInMinutes={timebox.totalTimeInMinutes}
-            onDelete={() => this.removeTimebox(index)}
-            onEdit={(updatedTimebox) => {
-                this.updateTimebox(index, {
-                    ...timebox,
-                    title: updatedTimebox.updatedTitle
-                });
-            }} />
+    renderTimebox = (timebox, index) => {
+        return <>
+
+            {this.state.editIndex === index ?
+                <TimeboxEditor
+                    initialTitle={timebox.title}
+                    initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
+                    onCancel={() => this.setState({ editIndex: null })}
+                    onUpdate={(updatedTimebox) => {
+                        this.updateTimebox(index, {
+                            ...timebox,
+                            ...updatedTimebox
+                        });
+                        this.setState({ editIndex: null });
+                    }}
+                /> :
+                <Timebox
+                    key={timebox.id}
+                    title={timebox.title}
+                    totalTimeInMinutes={timebox.totalTimeInMinutes}
+                    onDelete={() => this.removeTimebox(index)}
+                    onEdit={() => this.setState({ editIndex: index })} />
+            }
+        </>
     }
 
     renderReadOnlyTimebox(timebox, index) {

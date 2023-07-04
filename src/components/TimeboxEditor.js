@@ -1,41 +1,56 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 function TimeboxEditor(props) {
-    const { 
-            title, 
-            totalTimeInMinutes,
-            isEditable,
-            onTitleChange,
-            onTotalTimeInMinutesChange,
-            onConfirm, 
-    } = props;
+    const titleInput = useRef();
+    const totalTimeInMinutesInput = useRef();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        props.onUpdate({
+            title: titleInput.current.value,
+            totalTimeInMinutes: totalTimeInMinutesInput.current.value
+        });
+
+        resetToInitialValues();
+    }
+
+    const handleCancel = () => {
+        props.onCancel();
+        resetToInitialValues();
+    }
+
+    const resetToInitialValues = () => {
+        titleInput.current.value = props.initialTitle;
+        totalTimeInMinutesInput.current.value = props.initialTotalTimeInMinutes;
+    }
+
     return (
-            <div className={`TimeboxEditor ${isEditable ? "" : "inactive"}`}>
-                <label>
-                    Co robisz? 
-                    <input 
-                        disabled={false}
-                        value={title}
-                        onChange={onTitleChange}
-                        type="text" 
-                    />
-                </label><br />
-                <label>
-                    Ile minut? 
-                    <input 
-                        disabled={false}
-                        value={totalTimeInMinutes} 
-                        onChange={onTotalTimeInMinutesChange}
-                        type="number" 
-                    />
-                    </label><br />
-                <button
-                    onClick={onConfirm}
-                    disabled={false}
-                >Zatwierdź zmiany</button>
-            </div>
-    )    
-        
+        <form
+            onSubmit={handleSubmit}
+            className="TimeboxCreator"
+        >
+            <label>
+                Co robisz?
+                <input
+                    ref={titleInput}
+                    defaultValue={props.initialTitle}
+                    type="text"
+                />
+            </label><br />
+            <label>
+                Ile minut?
+                <input
+                    ref={totalTimeInMinutesInput}
+                    defaultValue={props.initialTotalTimeInMinutes}
+                    type="number"
+                />
+            </label><br />
+            <a onClick={handleCancel}>Anuluj</a>
+            <button>Zapisz zmiany</button>
+        </form>
+    )
+
 }
 
 export default TimeboxEditor;

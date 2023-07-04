@@ -86,13 +86,13 @@ class CurrentTimebox extends React.Component {
     render() {
         console.count("render");
         const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
-        const { title, totalTimeInMinutes, isEditable, onEdit } = this.props;
+        const { title, totalTimeInMinutes } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes*60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
         
         const [minutesLeft, secondsLeft] = getMinsAndSecsFromSecs(timeLeftInSeconds);
         return (
-            <div className={`CurrentTimebox ${isEditable ? "inactive" : ""}`}>
+            <div className="CurrentTimebox">
                 <h1>{title}</h1>
                 <Clock 
                     minutes={minutesLeft} 
@@ -106,7 +106,6 @@ class CurrentTimebox extends React.Component {
                     color="purp"
                     big
                 />          
-                <button onClick={onEdit} disabled={isEditable}>Edytuj</button>
                 <button onClick={this.handleStart} disabled={isRunning}>Start</button>
                 <button onClick={this.handleStop} disabled={!isRunning}>Stop</button>
                 <button onClick={this.togglePause} disabled={!isRunning}>{isPaused ? "Resume" : "Pause"}</button>

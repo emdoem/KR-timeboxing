@@ -6,6 +6,7 @@ class Timebox extends React.Component {
         super(props);
         this.updatedTitleInput = React.createRef();
     }
+    /*
     handleEdit = (event) => {
         //event.preventDefault;
         this.props.onEdit({
@@ -13,26 +14,31 @@ class Timebox extends React.Component {
         });
         this.updatedTitleInput.current.value = "";
     }
+    */
 
-    
-    
-    render () {
+
+
+    render() {
         const updatedTitle = this.updatedTitleInput.current;
         const { title, totalTimeInMinutes, onDelete } = this.props;
         if (totalTimeInMinutes <= 0) {
             throw new Error("Całkowity czas musi być większy niż zero!");
         };
         return (
-            <div 
+            <div
                 className="Timebox"
             >
                 <h3>{title} - {totalTimeInMinutes} min. </h3>
                 <button onClick={onDelete} >Usuń</button>
-                <button onClick={this.handleEdit} >Zmień</button>
+                <button onClick={this.props.onEdit} >Zmień</button>
+
+                {/* 
                 <input
                     ref={this.updatedTitleInput}
                     type="text"  
-                />
+                /> 
+                */}
+
             </div>
         )
     }
