@@ -8,9 +8,14 @@ function Header() {
         <header className="header">
             <UserGreeting />
             <AuthenticationContext.Consumer>
-                {({ handleLogout }) => <a onClick={handleLogout} className="header__logout-link" href="#">Wyloguj się</a>}
+                {({ handleLogout }) =>
+                    <a
+                        onClick={handleLogout}
+                        className="header__logout-link"
+                        href="#"
+                    >Wyloguj się</a>}
             </AuthenticationContext.Consumer>
-            
+
         </header>
 
     );
