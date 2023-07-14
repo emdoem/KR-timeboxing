@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext, useReducer } from 'react';
 
 import TimeboxCreator from "./TimeboxCreatorFunc";
 // import Timebox from "./Timebox";
@@ -14,27 +14,44 @@ export const Timebox = React.lazy(() => import('./Timebox'));
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
-class TimeboxManager extends React.Component {
-    state = {
+const stateReducer = (prevState, stateChanges) => {
+    let newState = prevState;
+
+    if (typeof stateChanges === "function") {
+        newState = stateChanges(prevState)
+    } else {
+        newState = {
+            ...prevState,
+            ...stateChanges
+        }
+    }
+    return newState;
+}
+
+function TimeboxManager() {
+    const initialState = {
         timeboxes: [],
         editIndex: null,
         loading: true,
         error: null
     }
 
-    componentDidMount() {
-        TimeboxesAPI.getAllTimeboxes(this.context.accessToken).then(
-            (timeboxes) => this.setState({ timeboxes })
-        ).catch(
-            (error) => this.setState({ error })
-        ).finally(
-            () => this.setState({ loading: false })
-        )
-    }
+    const [state, setState] = useReducer(stateReducer, initialState);
+    const { accessToken } = useContext(AuthenticationContext);
 
-    addTimebox = (timebox) => {
-        TimeboxesAPI.addTimebox(timebox, this.context.accessToken).then(
-            (addedTimebox) => this.setState(prevState => {
+    useEffect(() => {
+        TimeboxesAPI.getAllTimeboxes(accessToken).then(
+            (timeboxes) => setState({ timeboxes })
+        ).catch(
+            (error) => setState({ error })
+        ).finally(
+            () => setState({ loading: false })
+        )
+    }, [])
+
+    const addTimebox = (timebox) => {
+        TimeboxesAPI.addTimebox(timebox, accessToken).then(
+            (addedTimebox) => setState(prevState => {
                 const timeboxes = [...prevState.timeboxes, addedTimebox];
                 return { timeboxes };
             }
@@ -43,9 +60,9 @@ class TimeboxManager extends React.Component {
 
     }
 
-    removeTimebox = (indexToRemove) => {
-        TimeboxesAPI.removeTimebox(this.state.timeboxes[indexToRemove], this.context.accessToken).then(
-            () => this.setState(prevState => {
+    const removeTimebox = (indexToRemove) => {
+        TimeboxesAPI.removeTimebox(state.timeboxes[indexToRemove], accessToken).then(
+            () => setState(prevState => {
                 const timeboxes = prevState.timeboxes.filter((timebox, index) =>
                     index !== indexToRemove
                 );
@@ -54,10 +71,10 @@ class TimeboxManager extends React.Component {
         )
     }
 
-    updateTimebox = (indexToUpdate, timeboxToUpdate) => {
-        TimeboxesAPI.replaceTimebox(timeboxToUpdate, this.context.accessToken)
+    const updateTimebox = (indexToUpdate, timeboxToUpdate) => {
+        TimeboxesAPI.replaceTimebox(timeboxToUpdate, accessToken)
             .then(
-                (updatedTimebox) => this.setState(prevState => {
+                (updatedTimebox) => setState(prevState => {
                     const timeboxes = prevState.timeboxes.map((timebox, index) =>
                         index === indexToUpdate ? updatedTimebox : timebox
                     );
@@ -67,41 +84,41 @@ class TimeboxManager extends React.Component {
 
     }
 
-    handleCreate = (createdTimebox) => {
+    const handleCreate = (createdTimebox) => {
         try {
-            this.addTimebox(createdTimebox);
+            addTimebox(createdTimebox);
         } catch (error) {
             console.log("Wystąpił błąd przy tworzeniu timeboxa: ", error);
         }
     }
 
-    renderTimebox = (timebox, index) => {
+    const renderTimebox = (timebox, index) => {
         return <>
 
-            {this.state.editIndex === index ?
+            {state.editIndex === index ?
                 <TimeboxEditor
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onCancel={() => this.setState({ editIndex: null })}
+                    onCancel={() => setState({ editIndex: null })}
                     onUpdate={(updatedTimebox) => {
-                        this.updateTimebox(index, {
+                        updateTimebox(index, {
                             ...timebox,
                             ...updatedTimebox
                         });
-                        this.setState({ editIndex: null });
+                        setState({ editIndex: null });
                     }}
                 /> :
                 <Timebox
                     key={timebox.id}
                     title={timebox.title}
                     totalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onDelete={() => this.removeTimebox(index)}
-                    onEdit={() => this.setState({ editIndex: index })} />
+                    onDelete={() => removeTimebox(index)}
+                    onEdit={() => setState({ editIndex: index })} />
             }
         </>
     }
 
-    renderReadOnlyTimebox(timebox, index) {
+    function renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
             key={timebox.id}
             title={timebox.title}
@@ -109,25 +126,22 @@ class TimeboxManager extends React.Component {
         />
     }
 
-
-    render() {
-        // console.table(this.state.timeboxes);
-        return (
-            <>
-                <TimeboxCreator onCreate={this.handleCreate} />
-                {this.state.loading ? "Timeboxy się ładują..." : null}
-                {this.state.error ? "Coś się wykrzaczyło w liście :(" : null}
-                <Error message="Coś się wykrzaczyło w liście :(">
-                    <TimeboxesList
-                        timeboxes={this.state.timeboxes}
-                        renderTimebox={this.renderTimebox}
-                    />
-                </Error>
+    return (
+        <>
+            <TimeboxCreator onCreate={handleCreate} />
+            {state.loading ? "Timeboxy się ładują..." : null}
+            {state.error ? "Coś się wykrzaczyło w liście :(" : null}
+            <Error message="Coś się wykrzaczyło w liście :(">
+                <TimeboxesList
+                    timeboxes={state.timeboxes}
+                    renderTimebox={renderTimebox}
+                />
+            </Error>
 
 
-            </>
-        )
-    }
+        </>
+    )
+
 }
 TimeboxManager.contextType = AuthenticationContext;
 
