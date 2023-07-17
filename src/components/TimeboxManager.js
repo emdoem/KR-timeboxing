@@ -8,80 +8,47 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { TimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import TimeboxEditor from './TimeboxEditor';
+import { timeboxesReducer } from './timeboxesReducer';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
-const stateReducer = (prevState, stateChanges) => {
-    let newState = prevState;
-
-    if (typeof stateChanges === "function") {
-        newState = stateChanges(prevState)
-    } else {
-        newState = {
-            ...prevState,
-            ...stateChanges
-        }
-    }
-    return newState;
-}
-
 function TimeboxManager() {
-    const initialState = {
-        timeboxes: [],
-        editIndex: null,
-        loading: true,
-        error: null
-    }
 
-    const [state, setState] = useReducer(stateReducer, initialState);
+    const [state, dispatch] = useReducer(timeboxesReducer, undefined, timeboxesReducer);
     const { accessToken } = useContext(AuthenticationContext);
 
     useEffect(() => {
         TimeboxesAPI.getAllTimeboxes(accessToken).then(
-            (timeboxes) => setState({ timeboxes })
+            (timeboxes) => dispatch({ type: "TIMEBOXES_SET", timeboxes })
         ).catch(
-            (error) => setState({ error })
+            (error) => dispatch({ type: "ERROR_SET", error })
         ).finally(
-            () => setState({ loading: false })
+            () => dispatch({ type: "LOADING_INDICATOR_DISABLE" })
         )
     }, [])
 
     const addTimebox = (timebox) => {
         TimeboxesAPI.addTimebox(timebox, accessToken).then(
-            (addedTimebox) => setState(prevState => {
-                const timeboxes = [...prevState.timeboxes, addedTimebox];
-                return { timeboxes };
-            }
-            )
+            (addedTimebox) => dispatch({ type: "TIMEBOX_ADD", timebox: addedTimebox })
         )
 
     }
 
-    const removeTimebox = (indexToRemove) => {
-        TimeboxesAPI.removeTimebox(state.timeboxes[indexToRemove], accessToken).then(
-            () => setState(prevState => {
-                const timeboxes = prevState.timeboxes.filter((timebox, index) =>
-                    index !== indexToRemove
-                );
-                return { timeboxes };
-            })
+    const removeTimebox = (timeboxToRemove) => {
+        TimeboxesAPI.removeTimebox(timeboxToRemove, accessToken)
+        .then(
+            () => dispatch({ type: "TIMEBOX_REMOVE", removedTimebox: timeboxToRemove })
         )
     }
 
-    const updateTimebox = (indexToUpdate, timeboxToUpdate) => {
+    const updateTimebox = (timeboxToUpdate) => {
         TimeboxesAPI.replaceTimebox(timeboxToUpdate, accessToken)
             .then(
-                (updatedTimebox) => setState(prevState => {
-                    const timeboxes = prevState.timeboxes.map((timebox, index) =>
-                        index === indexToUpdate ? updatedTimebox : timebox
-                    );
-                    return { timeboxes };
-                })
+                (replacedTimebox) => dispatch({ type: "TIMEBOX_REPLACE", replacedTimebox })
             )
-
     }
 
     const handleCreate = (createdTimebox) => {
@@ -92,28 +59,25 @@ function TimeboxManager() {
         }
     }
 
-    const renderTimebox = (timebox, index) => {
+    const renderTimebox = (timebox) => {
         return <>
 
-            {state.editIndex === index ?
+            {state.currentlyEditedTimeboxId === timebox.id ?
                 <TimeboxEditor
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onCancel={() => setState({ editIndex: null })}
+                    onCancel={() => dispatch({ type: "TIMEBOX_EDIT_STOP" })}
                     onUpdate={(updatedTimebox) => {
-                        updateTimebox(index, {
-                            ...timebox,
-                            ...updatedTimebox
-                        });
-                        setState({ editIndex: null });
+                        updateTimebox({...timebox, ...updatedTimebox});
+                        dispatch({ type: "TIMEBOX_EDIT_STOP" });
                     }}
                 /> :
                 <Timebox
                     key={timebox.id}
                     title={timebox.title}
                     totalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onDelete={() => removeTimebox(index)}
-                    onEdit={() => setState({ editIndex: index })} />
+                    onDelete={() => removeTimebox(timebox)}
+                    onEdit={() => dispatch({ type: "TIMEBOX_EDIT_START", currentlyEditedTimeboxId: timebox.id })} />
             }
         </>
     }
