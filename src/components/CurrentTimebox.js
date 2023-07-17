@@ -1,118 +1,72 @@
-import React from 'react';
+import React, { useReducer, useRef } from 'react';
 
 import Clock from "./Clock";
 import ProgressBar from "./ProgressBar";
-import {getMinsAndSecsFromSecs} from "../lib/time";
+import { getMinsAndSecsFromSecs } from "../lib/time";
+import { currentTimeboxReducer, initialState } from './currentTimeboxReducer';
 
-class CurrentTimebox extends React.Component {
-    constructor(props) {
-        super(props);
-        console.count("constructor");
-        this.state = {
-            isRunning: false,
-            isPaused: false,
-            pausesCount: 0,
-            elapsedTimeInSeconds: 0
-        }
-        this.handleStart = this.handleStart.bind(this)
-        this.handleStop = this.handleStop.bind(this)
-        this.togglePause = this.togglePause.bind(this)
-        this.intervalId = null
+function CurrentTimebox({ title, totalTimeInMinutes }) {
+
+    const [state, dispatch] = useReducer(currentTimeboxReducer, initialState, currentTimeboxReducer);
+    let intervalIdRef = useRef(null);
+
+    function handleStart() {
+        dispatch({ type: "TIMER_START" })
+        startTimer();
     }
-    componentWillMount() {
-        console.count("componentWillMount");
+    function handleStop() {
+        dispatch({ type: "TIMER_STOP" })
+        stopTimer();
     }
-    componentDidMount() {
-        console.count("componentDidMount");
-    }
-    componentDidUpdate() {
-        console.count("componentDidUpdate");
-    }
-    componentWillUnmount() {
-        console.count("componentWillUnmount");
-        this.stopTimer();
-    }
-    handleStart(event) {
-        this.setState({
-            isRunning: true,
-        })
-        this.startTimer();
-    }
-    handleStop(event) {
-        this.setState({
-            isRunning: false,
-            isPaused: false,
-            pausesCount: 0,
-            elapsedTimeInSeconds: 0
-        })
-        this.stopTimer();
-    }
-    startTimer() {
-        if (this.intervalId === null) {
-            this.intervalId = window.setInterval(
-                () => {
-                    console.log("timer is on");
-                    this.setState(
-                        (prevState) => ({ elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1})
-                    )
-                },
-                100
+    function startTimer() {
+        if (intervalIdRef.current === null) {
+            intervalIdRef.current = window.setInterval(
+                () => dispatch({ type: "TIMER_RUNNING" }), 100
             )
         }
-        
+
     }
-    stopTimer() {
-        window.clearInterval(this.intervalId);
-        this.intervalId = null;
+    function stopTimer() {
+        window.clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
     }
-    togglePause() {
-        this.setState(
-            function(prevState) {
-                console.count("setState");
-                const isPaused = !prevState.isPaused;
-                if (isPaused) {
-                    this.stopTimer();
-                } else {
-                    this.startTimer();
-                }
-                return {
-                    isPaused,
-                    pausesCount: isPaused ? prevState.pausesCount +1 : prevState.pausesCount
-                }
-            }
-        )
+    function togglePause() {
+        dispatch({type: "PAUSE_TOGGLE"})
+        if (state.isPaused) {
+            startTimer();
+        } else {
+            stopTimer();
+        }
     }
-    //below: passing state into ProgressBar
-    render() {
-        console.count("render");
-        const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
-        const { title, totalTimeInMinutes } = this.props;
-        const totalTimeInSeconds = totalTimeInMinutes*60;
-        const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-        
-        const [minutesLeft, secondsLeft] = getMinsAndSecsFromSecs(timeLeftInSeconds);
-        return (
-            <div className="CurrentTimebox">
-                <h1>{title}</h1>
-                <Clock 
-                    minutes={minutesLeft} 
-                    seconds={secondsLeft} 
-                    className={isPaused ? "inactive" : ""} 
-                />
-                <ProgressBar 
-                    className={isPaused ? "inactive" : ""} 
-                    timeLeft={timeLeftInSeconds} 
-                    totalTime={totalTimeInSeconds} 
-                    color="purp"
-                    big
-                />          
-                <button onClick={this.handleStart} disabled={isRunning}>Start</button>
-                <button onClick={this.handleStop} disabled={!isRunning}>Stop</button>
-                <button onClick={this.togglePause} disabled={!isRunning}>{isPaused ? "Resume" : "Pause"}</button>
-                Liczba przerw: {pausesCount}
-            </div>
-        )
-    }
+    console.table(state);
+    const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = state;
+    const totalTimeInSeconds = totalTimeInMinutes * 60;
+    const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+
+    const [minutesLeft, secondsLeft] = getMinsAndSecsFromSecs(timeLeftInSeconds);
+
+    return (
+        <div className="CurrentTimebox">
+            <h1>{title}</h1>
+            <Clock
+                minutes={minutesLeft}
+                seconds={secondsLeft}
+                className={isPaused ? "inactive" : ""}
+            />
+            <ProgressBar
+                className={isPaused ? "inactive" : ""}
+                timeLeft={timeLeftInSeconds}
+                totalTime={totalTimeInSeconds}
+                color="purp"
+                big
+            />
+            <button onClick={handleStart} disabled={isRunning}>Start</button>
+            <button onClick={handleStop} disabled={!isRunning}>Stop</button>
+            <button onClick={togglePause} disabled={!isRunning}>{isPaused ? "Resume" : "Pause"}</button>
+            Liczba przerw: {pausesCount}
+        </div>
+    )
+
 }
 
 export default CurrentTimebox;
