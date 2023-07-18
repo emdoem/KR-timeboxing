@@ -9,6 +9,7 @@ import { TimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import TimeboxEditor from './TimeboxEditor';
 import { timeboxesReducer } from './timeboxesReducer';
+import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, stopEditingTimebox, replaceTimebox, removeTimebox, startEditingTimebox } from './TimeboxesManagerActions';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
@@ -22,38 +23,19 @@ function TimeboxManager() {
 
     useEffect(() => {
         TimeboxesAPI.getAllTimeboxes(accessToken).then(
-            (timeboxes) => dispatch({ type: "TIMEBOXES_SET", timeboxes })
+            (timeboxes) => dispatch(setTimeboxes(timeboxes))
         ).catch(
-            (error) => dispatch({ type: "ERROR_SET", error })
+            (error) => dispatch(setError(error))
         ).finally(
-            () => dispatch({ type: "LOADING_INDICATOR_DISABLE" })
+            () => dispatch(disableLoadingIndicator())
         )
     }, [])
 
-    const addTimebox = (timebox) => {
-        TimeboxesAPI.addTimebox(timebox, accessToken).then(
-            (addedTimebox) => dispatch({ type: "TIMEBOX_ADD", timebox: addedTimebox })
-        )
-
-    }
-
-    const removeTimebox = (timeboxToRemove) => {
-        TimeboxesAPI.removeTimebox(timeboxToRemove, accessToken)
-        .then(
-            () => dispatch({ type: "TIMEBOX_REMOVE", removedTimebox: timeboxToRemove })
-        )
-    }
-
-    const updateTimebox = (timeboxToUpdate) => {
-        TimeboxesAPI.replaceTimebox(timeboxToUpdate, accessToken)
-            .then(
-                (replacedTimebox) => dispatch({ type: "TIMEBOX_REPLACE", replacedTimebox })
-            )
-    }
-
     const handleCreate = (createdTimebox) => {
         try {
-            addTimebox(createdTimebox);
+            TimeboxesAPI.addTimebox(createdTimebox, accessToken).then(
+                (addedTimebox) => dispatch(addTimebox(addedTimebox))
+            );
         } catch (error) {
             console.log("Wystąpił błąd przy tworzeniu timeboxa: ", error);
         }
@@ -66,22 +48,28 @@ function TimeboxManager() {
                 <TimeboxEditor
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onCancel={() => dispatch({ type: "TIMEBOX_EDIT_STOP" })}
+                    onCancel={() => dispatch(stopEditingTimebox())}
                     onUpdate={(updatedTimebox) => {
-                        updateTimebox({...timebox, ...updatedTimebox});
-                        dispatch({ type: "TIMEBOX_EDIT_STOP" });
+                        TimeboxesAPI.replaceTimebox({ ...timebox, ...updatedTimebox }, accessToken)
+                            .then(
+                                (replacedTimebox) => dispatch(replaceTimebox(replacedTimebox))
+                            )
+                        dispatch(stopEditingTimebox());
                     }}
                 /> :
                 <Timebox
                     key={timebox.id}
                     title={timebox.title}
                     totalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onDelete={() => removeTimebox(timebox)}
-                    onEdit={() => dispatch({ type: "TIMEBOX_EDIT_START", currentlyEditedTimeboxId: timebox.id })} />
+                    onDelete={() => TimeboxesAPI.removeTimebox(timebox, accessToken)
+                        .then(
+                            () => dispatch(removeTimebox(timebox))
+                        )}
+                    onEdit={() => dispatch(startEditingTimebox(timebox.id))} />
             }
         </>
     }
-
+    /* renderProps excercise:
     function renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
             key={timebox.id}
@@ -89,7 +77,7 @@ function TimeboxManager() {
             totalTimeInMinutes={timebox.totalTimeInMinutes}
         />
     }
-
+    */
     return (
         <>
             <TimeboxCreator onCreate={handleCreate} />
