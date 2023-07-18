@@ -8,10 +8,10 @@ export function timeboxesReducer(state = initialState, action = {}) {
             return { ...state, timeboxes };
         }
         case "LOADING_INDICATOR_DISABLE":
-            return { ...state, loading: false };
+            return { ...state, timeboxesAreLoading: false };
         case "ERROR_SET": {
-            const { error } = action;
-            return { ...state, error };
+            const { timeboxesLoadingError } = action;
+            return { ...state, timeboxesLoadingError };
         }
         case "TIMEBOX_ADD": {
             const { timebox } = action;
@@ -43,6 +43,14 @@ export function timeboxesReducer(state = initialState, action = {}) {
 const initialState = {
     timeboxes: [],
     editIndex: null,
-    loading: true,
-    error: null
+    timeboxesAreLoading: true,
+    timeboxesLoadingError: null
 };
+
+export const getAllTimeboxes = (state) => state.timeboxes;
+export const areTimeboxesLoading = (state) => state.timeboxesAreLoading;
+export const getTimeboxesLoadingError = (state) => state.timeboxesLoadingError;
+export const isTimeboxEdited = (state, timebox) => state.currentlyEditedTimeboxId && state.currentlyEditedTimeboxId === timebox.id;
+export const getTimeboxById = (state, timeboxId) => state.timeboxes.find(timebox => timebox.id === timeboxId);
+export const getCurrentlyEditedTimebox = (state) => getTimeboxById(state, state.currentlyEditedTimeboxId);
+export const isAnyTimeboxEdited = (state) => !!state.currentlyEditedTimeboxId;

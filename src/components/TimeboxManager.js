@@ -8,13 +8,15 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { TimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import TimeboxEditor from './TimeboxEditor';
-import { timeboxesReducer } from './timeboxesReducer';
+import { timeboxesReducer, isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from './timeboxesReducer';
 import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, stopEditingTimebox, replaceTimebox, removeTimebox, startEditingTimebox } from './TimeboxesManagerActions';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
+
+
 
 function TimeboxManager() {
 
@@ -44,7 +46,7 @@ function TimeboxManager() {
     const renderTimebox = (timebox) => {
         return <>
 
-            {state.currentlyEditedTimeboxId === timebox.id ?
+            {isTimeboxEdited(state, timebox) ?
                 <TimeboxEditor
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
@@ -69,7 +71,7 @@ function TimeboxManager() {
             }
         </>
     }
-    /* renderProps excercise:
+    
     function renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
             key={timebox.id}
@@ -77,15 +79,15 @@ function TimeboxManager() {
             totalTimeInMinutes={timebox.totalTimeInMinutes}
         />
     }
-    */
+    
     return (
         <>
             <TimeboxCreator onCreate={handleCreate} />
-            {state.loading ? "Timeboxy się ładują..." : null}
-            {state.error ? "Coś się wykrzaczyło w liście :(" : null}
+            {areTimeboxesLoading(state) ? "Timeboxy się ładują..." : null}
+            {getTimeboxesLoadingError(state) ? "Coś się wykrzaczyło w liście :(" : null}
             <Error message="Coś się wykrzaczyło w liście :(">
                 <TimeboxesList
-                    timeboxes={state.timeboxes}
+                    timeboxes={getAllTimeboxes(state)}
                     renderTimebox={renderTimebox}
                 />
             </Error>
