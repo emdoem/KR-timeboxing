@@ -5,6 +5,8 @@ import ProgressBar from "./ProgressBar";
 import { getMinsAndSecsFromSecs } from "../lib/time";
 import { currentTimeboxReducer, initialState } from './currentTimeboxReducer';
 
+const runTimer = () => ({ type: "TIMER_RUNNING" });
+
 function CurrentTimebox({ title, totalTimeInMinutes }) {
 
     const [state, dispatch] = useReducer(currentTimeboxReducer, initialState, currentTimeboxReducer);
@@ -21,7 +23,7 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
     function startTimer() {
         if (intervalIdRef.current === null) {
             intervalIdRef.current = window.setInterval(
-                () => dispatch({ type: "TIMER_RUNNING" }), 100
+                () => dispatch(runTimer()), 100
             )
         }
 
