@@ -43,6 +43,8 @@ class Timebox extends React.Component {
         )
     }
 }
+/*
+temporarily off
 Timebox.defaultProps = {
     onDelete: console.log('Delete has been issued.'),
     onEdit: console.log('Edit has been issued.')
@@ -54,5 +56,5 @@ Timebox.propTypes = {
     onDelete: PropTypes.func.isRequired, // ={() => this.removeTimebox(index)}
     onEdit: PropTypes.func.isRequired
 }
-
+*/
 export default Timebox;
