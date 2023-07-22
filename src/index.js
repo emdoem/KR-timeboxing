@@ -4,4 +4,14 @@ import ReactDOM from 'react-dom';
 import App from "./components/App";
 import "./styles/main.scss"
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import { store } from './components/reduxStore';
+import {Provider} from 'react-redux';
+// export const StoreContext = React.createContext({ store: null })
+
+
+ReactDOM.render(
+    <Provider store={ store }>
+        <App />
+    </Provider>
+    , document.getElementById("root")
+);

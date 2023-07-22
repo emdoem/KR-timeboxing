@@ -8,24 +8,33 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { TimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import TimeboxEditor from './TimeboxEditor';
-import { timeboxesReducer, isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from './timeboxesReducer';
+import { isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from './timeboxesReducer';
 import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, stopEditingTimebox, replaceTimebox, removeTimebox, startEditingTimebox } from './TimeboxesManagerActions';
+
+import { useForceUpdate } from './reduxStore';
+import { useStore } from 'react-redux';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
-
-
 function TimeboxManager() {
 
-    const [state, dispatch] = useReducer(timeboxesReducer, undefined, timeboxesReducer);
+    // const [state, dispatch] = useReducer(timeboxesReducer, undefined, timeboxesReducer);
+    const store = useStore();
+    const forceUpdate = useForceUpdate();
+    const state = store.getState().timeboxesManager;
+    const dispatch = store.dispatch;
+    useEffect(() => store.subscribe(forceUpdate), []);
+
     const { accessToken } = useContext(AuthenticationContext);
 
     useEffect(() => {
         TimeboxesAPI.getAllTimeboxes(accessToken).then(
-            (timeboxes) => dispatch(setTimeboxes(timeboxes))
+            (timeboxes) => {
+                dispatch(setTimeboxes(timeboxes))
+            }
         ).catch(
             (error) => dispatch(setError(error))
         ).finally(
@@ -48,6 +57,7 @@ function TimeboxManager() {
 
             {isTimeboxEdited(state, timebox) ?
                 <TimeboxEditor
+                    key={timebox.id}
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
                     onCancel={() => dispatch(stopEditingTimebox())}
@@ -71,7 +81,7 @@ function TimeboxManager() {
             }
         </>
     }
-    
+
     function renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
             key={timebox.id}
@@ -79,7 +89,7 @@ function TimeboxManager() {
             totalTimeInMinutes={timebox.totalTimeInMinutes}
         />
     }
-    
+
     return (
         <>
             <TimeboxCreator onCreate={handleCreate} />
