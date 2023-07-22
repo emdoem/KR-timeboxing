@@ -1,3 +1,8 @@
+# Kurs Reacta / React.js course
+Pomodoro-inspired App - a training ground for everything React. A lot is going on and a lot more will probably happen.
+
+I tried marking most of my custom implementations with comments.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
