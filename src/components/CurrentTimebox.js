@@ -42,26 +42,23 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
         intervalIdRef.current = null;
     }
     function togglePause() {
-        dispatch({type: "PAUSE_TOGGLE"})
+        dispatch({ type: "PAUSE_TOGGLE" })
         if (state.isPaused) {
             startTimer();
         } else {
             stopTimer();
         }
     }
-    console.table(state);
+    // console.table(state);
     const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = state;
     const totalTimeInSeconds = totalTimeInMinutes * 60;
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-
-    const [minutesLeft, secondsLeft] = getMinsAndSecsFromSecs(timeLeftInSeconds);
 
     return (
         <div className="CurrentTimebox">
             <h1>{title}</h1>
             <Clock
-                minutes={minutesLeft}
-                seconds={secondsLeft}
+                totalTimeInSeconds={totalTimeInSeconds}
                 className={isPaused ? "inactive" : ""}
             />
             <ProgressBar

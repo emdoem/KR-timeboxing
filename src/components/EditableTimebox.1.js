@@ -16,24 +16,26 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return { onEdit, onCancel };
 }
 
-export const EditableTimebox = connect(mapStateToProps, mapDispatchToProps)(function EditableTimebox({
-    timebox, isEdited, onCancel, onEdit, onUpdate, onDelete }) {
-    return <>
-        {isEdited ?
-            <TimeboxEditor
-                key={timebox.id}
-                initialTitle={timebox.title}
-                initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
-                onCancel={onCancel}
-                onUpdate={onUpdate} 
-            /> :
-            <Timebox
-                key={timebox.id}
-                title={timebox.title}
-                totalTimeInMinutes={timebox.totalTimeInMinutes}
-                onDelete={onDelete}
-                onEdit={onEdit} 
-            />
-        }
-    </>;
-})
+export const EditableTimebox = connect(mapStateToProps, mapDispatchToProps)(
+    function EditableTimebox({
+        timebox, isEdited, onCancel, onEdit, onUpdate, onDelete }) {
+        return <>
+            {isEdited ?
+                <TimeboxEditor
+                    key={timebox.id}
+                    initialTitle={timebox.title}
+                    initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
+                    onCancel={onCancel}
+                    onUpdate={onUpdate}
+                /> :
+                <Timebox
+                    key={timebox.id}
+                    title={timebox.title}
+                    totalTimeInMinutes={timebox.totalTimeInMinutes}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                />
+            }
+        </>;
+    }
+)
