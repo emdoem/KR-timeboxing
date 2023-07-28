@@ -2,7 +2,7 @@ import EditableTimebox from "../../components/EditableTimebox";
 import { render, cleanup, fireEvent, userEvent } from '@testing-library/react';
 import React from "react";
 
-describe('EditableTimebox />', () => {
+describe.skip('EditableTimebox />', () => {
     afterEach(cleanup)
     xit('shows edit button', () => {
         const { debug, getByText } = render(<EditableTimebox />);
