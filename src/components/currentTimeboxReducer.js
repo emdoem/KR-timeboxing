@@ -27,3 +27,7 @@ export const initialState = {
     pausesCount: 0,
     elapsedTimeInSeconds: 0,
 };
+export const getPauseStatus = state => state.isPaused;
+export const getRunningStatus = state => state.isRunning;
+export const getPausesCount = state => state.pausesCount;
+export const getElapsedTimeInSeconds = state => state.elapsedTimeInSeconds;
