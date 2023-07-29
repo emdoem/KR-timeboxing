@@ -8,7 +8,7 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { AllTimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import { areTimeboxesLoading, getTimeboxesLoadingError } from './timeboxesReducer';
-import { fetchAllTimeboxes, setTimeboxes, setError, disableLoadingIndicator, addTimebox, stopEditingTimebox, replaceTimebox, removeTimebox, startEditingTimebox } from './TimeboxesManagerActions';
+import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './TimeboxesManagerActions';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { EditableTimebox } from './EditableTimebox.1';
@@ -26,16 +26,7 @@ function TimeboxManager() {
     const { accessToken } = useContext(AuthenticationContext);
 
     useEffect(() => {
-        TimeboxesAPI.getAllTimeboxes(accessToken).then(
-            (timeboxes) => {
-                dispatch(setTimeboxes(timeboxes))
-                // console.table(timeboxes)
-            }
-        ).catch(
-            (error) => dispatch(setError(error))
-        ).finally(
-            () => dispatch(disableLoadingIndicator())
-        )
+        dispatch(fetchAllTimeboxes(accessToken))
     }, [])
 
     const handleCreate = (createdTimebox) => {
@@ -49,17 +40,8 @@ function TimeboxManager() {
     }
 
     const renderTimebox = (timebox) => {
-        const onUpdate = (updatedTimebox) => {
-            TimeboxesAPI.replaceTimebox({ ...timebox, ...updatedTimebox }, accessToken)
-                .then(
-                    (replacedTimebox) => dispatch(replaceTimebox(replacedTimebox))
-                )
-            dispatch(stopEditingTimebox());
-        };
-        const onDelete = () => TimeboxesAPI.removeTimebox(timebox, accessToken)
-            .then(
-                () => dispatch(removeTimebox(timebox))
-            );
+        const onUpdate = (updatedTimebox) => dispatch(updateTimeboxRemotely(timebox, updatedTimebox, accessToken))
+        const onDelete = () => dispatch(removeTimeboxRemotely(timebox, accessToken))
 
         return <EditableTimebox
             timebox={timebox}
