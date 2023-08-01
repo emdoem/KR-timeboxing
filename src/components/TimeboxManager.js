@@ -8,7 +8,7 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 import { AllTimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import { areTimeboxesLoading, getTimeboxesLoadingError } from './timeboxesReducer';
-import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './TimeboxesManagerActions';
+import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { EditableTimebox } from './EditableTimebox.1';

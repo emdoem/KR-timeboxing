@@ -3,13 +3,12 @@ import React, { useReducer, useRef, useEffect } from 'react';
 import Clock from "./Clock";
 import ProgressBar from "./ProgressBar";
 import { getPauseStatus, getRunningStatus, getPausesCount, getElapsedTimeInSeconds } from './currentTimeboxReducer';
+import {finishCurrentTimebox, startTimerAction, stopTimerAction, runTimer, togglePauseAction} from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentTimebox } from './timeboxesReducer';
 
-
-const runTimer = () => ({ type: "TIMER_RUNNING" });
-
-function CurrentTimebox({ title, totalTimeInMinutes }) {
+function CurrentTimebox() {
 
     const dispatch = useDispatch();
     const isPaused = useSelector(state => getPauseStatus(state.currentTimebox));
@@ -17,15 +16,19 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
     const pausesCount = useSelector(state => getPausesCount(state.currentTimebox));
     //no idea why this one below works without reffering to the currentTimebox part of the state...
     const elapsedTimeInSeconds = useSelector(getElapsedTimeInSeconds);
+    //these selectors refer to timeboxesManager part of the state
+    const currentTimeboxFromState = useSelector(state => getCurrentTimebox(state.timeboxesManager));
+    const title = currentTimeboxFromState ? currentTimeboxFromState.title : null;
+    const totalTimeInMinutes = currentTimeboxFromState ? currentTimeboxFromState.totalTimeInMinutes : null;
     
     let intervalIdRef = useRef(null);
 
     function handleStart() {
-        dispatch({ type: "TIMER_START" })
+        dispatch(startTimerAction())
         startTimer();
     }
     function handleStop() {
-        dispatch({ type: "TIMER_STOP" })
+        dispatch(stopTimerAction())
         stopTimer();
     }
     function startTimer() {
@@ -41,12 +44,15 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
         intervalIdRef.current = null;
     }
     function togglePause() {
-        dispatch({ type: "PAUSE_TOGGLE" })
+        dispatch(togglePauseAction())
         if (isPaused) {
             startTimer();
         } else {
             stopTimer();
         }
+    }
+    function handleBackToList() {
+        dispatch(finishCurrentTimebox())
     }
     // console.table(state);
 
@@ -54,6 +60,8 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
 
     return (
+        <>
+        {currentTimeboxFromState ? 
         <div className="CurrentTimebox">
             <h1>{title}</h1>
             <Clock
@@ -71,7 +79,10 @@ function CurrentTimebox({ title, totalTimeInMinutes }) {
             <button onClick={handleStop} disabled={!isRunning}>Stop</button>
             <button onClick={togglePause} disabled={!isRunning}>{isPaused ? "Resume" : "Pause"}</button>
             Liczba przerw: {pausesCount}
-        </div>
+            <button onClick={handleBackToList} disabled={isRunning}>Zakończ</button>
+        </div> : null}
+        </>
+        
     )
 
 }

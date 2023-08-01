@@ -7,6 +7,9 @@ export function timeboxesReducer(state = initialState, action = {}) {
             const {timebox} = action;
             return { ...state, currentTimeboxId: timebox.id};
         }
+        case "CURRENT_TIMEBOX_FINISH": {
+            return {...state, currentTimeboxId: null}
+        }
         case "TIMEBOXES_SET": {
             const { timeboxes } = action;
             return { ...state, timeboxes };

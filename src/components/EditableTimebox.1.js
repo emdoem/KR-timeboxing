@@ -4,7 +4,7 @@ import { Timebox } from './TimeboxManager';
 
 import { connect } from 'react-redux';
 import { isTimeboxEdited } from './timeboxesReducer';
-import { startEditingTimebox, stopEditingTimebox, makeTimeboxCurrent } from './TimeboxesManagerActions';
+import { startEditingTimebox, stopEditingTimebox, makeTimeboxCurrent } from './actions';
 
 const mapStateToProps = (state, ownProps) => ({
     isEdited: isTimeboxEdited(state.timeboxesManager, ownProps.timebox)
