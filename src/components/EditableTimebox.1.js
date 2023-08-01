@@ -4,7 +4,7 @@ import { Timebox } from './TimeboxManager';
 
 import { connect } from 'react-redux';
 import { isTimeboxEdited } from './timeboxesReducer';
-import { startEditingTimebox, stopEditingTimebox } from './TimeboxesManagerActions';
+import { startEditingTimebox, stopEditingTimebox, makeTimeboxCurrent } from './TimeboxesManagerActions';
 
 const mapStateToProps = (state, ownProps) => ({
     isEdited: isTimeboxEdited(state.timeboxesManager, ownProps.timebox)
@@ -12,13 +12,14 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, ownProps) => {
     const onEdit = () => dispatch(startEditingTimebox(ownProps.timebox.id));
     const onCancel = () => dispatch(stopEditingTimebox());
+    const onMakeCurrent = () => dispatch(makeTimeboxCurrent(ownProps.timebox))
 
-    return { onEdit, onCancel };
+    return { onEdit, onCancel, onMakeCurrent };
 }
 
 export const EditableTimebox = connect(mapStateToProps, mapDispatchToProps)(
     function EditableTimebox({
-        timebox, isEdited, onCancel, onEdit, onUpdate, onDelete }) {
+        timebox, isEdited, onCancel, onEdit, onUpdate, onDelete, onMakeCurrent }) {
         return <>
             {isEdited ?
                 <TimeboxEditor
@@ -34,6 +35,7 @@ export const EditableTimebox = connect(mapStateToProps, mapDispatchToProps)(
                     totalTimeInMinutes={timebox.totalTimeInMinutes}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    onMakeCurrent={onMakeCurrent}
                 />
             }
         </>;

@@ -8,6 +8,7 @@ export const removeTimebox = removedTimebox => ({ type: "TIMEBOX_REMOVE", remove
 export const replaceTimebox = replacedTimebox => ({ type: "TIMEBOX_REPLACE", replacedTimebox });
 export const startEditingTimebox = currentlyEditedTimeboxId => ({ type: "TIMEBOX_EDIT_START", currentlyEditedTimeboxId });
 export const stopEditingTimebox = () => ({ type: "TIMEBOX_EDIT_STOP" });
+export const makeTimeboxCurrent = timebox => ({type: "TIMEBOX_MAKE_CURRENT", timebox})
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
@@ -16,7 +17,7 @@ export const fetchAllTimeboxes = (accessToken) => (dispatch) => {
     TimeboxesAPI.getAllTimeboxes(accessToken).then(
         (timeboxes) => {
             dispatch(setTimeboxes(timeboxes))
-            console.table(timeboxes)
+            // console.table(timeboxes)
         }
     ).catch(
         (error) => dispatch(setError(error))

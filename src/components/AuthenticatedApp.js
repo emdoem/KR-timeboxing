@@ -15,8 +15,7 @@ function AuthenticatedApp() {
             </Portal>
             <TimeboxManager />
             <CurrentTimebox
-                title={"Refaktoruję!"}
-                totalTimeInMinutes={15}
+                
             />
             <InspirationalQuote />
         </>

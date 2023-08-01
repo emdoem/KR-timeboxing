@@ -3,6 +3,10 @@ export function timeboxesReducer(state = initialState, action = {}) {
         return initialState;
     }
     switch (action.type) {
+        case "TIMEBOX_MAKE_CURRENT": {
+            const {timebox} = action;
+            return { ...state, currentTimeboxId: timebox.id};
+        }
         case "TIMEBOXES_SET": {
             const { timeboxes } = action;
             return { ...state, timeboxes };
@@ -21,7 +25,8 @@ export function timeboxesReducer(state = initialState, action = {}) {
         case "TIMEBOX_REMOVE": {
             const { removedTimebox } = action;
             const timeboxes = state.timeboxes.filter((timebox) => timebox.id !== removedTimebox.id);
-            return { ...state, timeboxes };
+            const currentTimeboxId = state.currentTimeboxId === removedTimebox.id ? null : state.currentTimeboxId;
+            return { ...state, timeboxes, currentTimeboxId };
         }
         case "TIMEBOX_REPLACE": {
             const { replacedTimebox } = action;
@@ -44,7 +49,8 @@ const initialState = {
     timeboxes: [],
     editIndex: null,
     timeboxesAreLoading: true,
-    timeboxesLoadingError: null
+    timeboxesLoadingError: null,
+    currentTimeboxId: null
 };
 
 export const getAllTimeboxes = (state) => state.timeboxes;
@@ -54,3 +60,5 @@ export const isTimeboxEdited = (state, timebox) => state.currentlyEditedTimeboxI
 export const getTimeboxById = (state, timeboxId) => state.timeboxes.find(timebox => timebox.id === timeboxId);
 export const getCurrentlyEditedTimebox = (state) => getTimeboxById(state, state.currentlyEditedTimeboxId);
 export const isAnyTimeboxEdited = (state) => !!state.currentlyEditedTimeboxId;
+export const isAnyTimeboxCurrent = state => !!state.currentTimeboxId;
+export const getCurrentTimebox = state => isAnyTimeboxCurrent(state) ? getTimeboxById(state, state.currentTimeboxId) : null;
