@@ -8,8 +8,8 @@ export const removeTimebox = removedTimebox => ({ type: "TIMEBOX_REMOVE", remove
 export const replaceTimebox = replacedTimebox => ({ type: "TIMEBOX_REPLACE", replacedTimebox });
 export const startEditingTimebox = currentlyEditedTimeboxId => ({ type: "TIMEBOX_EDIT_START", currentlyEditedTimeboxId });
 export const stopEditingTimebox = () => ({ type: "TIMEBOX_EDIT_STOP" });
-export const makeTimeboxCurrent = timebox => ({type: "TIMEBOX_MAKE_CURRENT", timebox});
-export const finishCurrentTimebox = () => ({type: "CURRENT_TIMEBOX_FINISH"});
+export const makeTimeboxCurrent = timebox => ({ type: "TIMEBOX_MAKE_CURRENT", timebox });
+export const closeCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_CLOSE" });
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
@@ -46,3 +46,5 @@ export const runTimer = () => ({ type: "TIMER_RUNNING" });
 export const startTimerAction = () => ({ type: "TIMER_START" });
 export const stopTimerAction = () => ({ type: "TIMER_STOP" });
 export const togglePauseAction = () => ({ type: "PAUSE_TOGGLE" });
+export const resetCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_RESET" });
+export const finishCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_FINISH" });

@@ -7,7 +7,7 @@ export function timeboxesReducer(state = initialState, action = {}) {
             const {timebox} = action;
             return { ...state, currentTimeboxId: timebox.id};
         }
-        case "CURRENT_TIMEBOX_FINISH": {
+        case "CURRENT_TIMEBOX_CLOSE": {
             return {...state, currentTimeboxId: null}
         }
         case "TIMEBOXES_SET": {
@@ -57,6 +57,7 @@ const initialState = {
 };
 
 export const getAllTimeboxes = (state) => state.timeboxes;
+export const getRemainingTimeboxes = state => state.timeboxes.filter(timebox => timebox.id !==state.currentTimeboxId)
 export const areTimeboxesLoading = (state) => state.timeboxesAreLoading;
 export const getTimeboxesLoadingError = (state) => state.timeboxesLoadingError;
 export const isTimeboxEdited = (state, timebox) => state.currentlyEditedTimeboxId && state.currentlyEditedTimeboxId === timebox.id;
