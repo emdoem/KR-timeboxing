@@ -31,6 +31,7 @@ function TimeboxCreator(props) {
                 <input
                     ref={totalTimeInMinutesInput}
                     type="number"
+                    step="0.01"
                 />
             </label><br />
             <button

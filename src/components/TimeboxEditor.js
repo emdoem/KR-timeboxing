@@ -44,6 +44,7 @@ function TimeboxEditor(props) {
                     ref={totalTimeInMinutesInput}
                     defaultValue={props.initialTotalTimeInMinutes}
                     type="number"
+                    step="0.01"
                 />
             </label><br />
             <a onClick={handleCancel}>Anuluj</a>
