@@ -5,7 +5,7 @@ import TimeboxCreator from "./TimeboxCreatorFunc";
 import Error from "./ErrorBoundary";
 import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 import AuthenticationContext from '../contexts/AuthenticationContexts';
-import { AllTimeboxesList } from './TimeboxesList';
+import { AllTimeboxesList, RemainingTimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import { areTimeboxesLoading, getTimeboxesLoadingError } from './timeboxesReducer';
 import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './actions';
@@ -66,7 +66,7 @@ function TimeboxManager() {
             {timeboxesLoading ? "Timeboxy się ładują..." : null}
             {timeboxesLoadingError ? "Coś się wykrzaczyło w liście :(" : null}
             <Error message="Coś się wykrzaczyło w liście :(">
-                <AllTimeboxesList
+                <RemainingTimeboxesList
                     renderTimebox={renderTimebox}
                 />
             </Error>
