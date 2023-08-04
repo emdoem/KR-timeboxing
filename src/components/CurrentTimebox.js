@@ -16,7 +16,8 @@ import {
     runTimer, 
     togglePauseAction, 
     resetCurrentTimebox, 
-    finishCurrentTimebox 
+    finishCurrentTimebox, 
+    finishTimeboxOffTheList
 } from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,7 +59,11 @@ function CurrentTimebox() {
     // so the timer never stopped
     useEffect(() => {
         if (timeLeftInSeconds <= 0.001) {
+            // this could be refactored into a single action dispatch
+            dispatch(finishTimeboxOffTheList());
             dispatch(finishCurrentTimebox());
+            dispatch(closeCurrentTimebox())
+
             handleStop();
         }
     }, [elapsedTimeInSeconds])

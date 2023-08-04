@@ -10,6 +10,7 @@ export const startEditingTimebox = currentlyEditedTimeboxId => ({ type: "TIMEBOX
 export const stopEditingTimebox = () => ({ type: "TIMEBOX_EDIT_STOP" });
 export const makeTimeboxCurrent = timebox => ({ type: "TIMEBOX_MAKE_CURRENT", timebox });
 export const closeCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_CLOSE" });
+export const finishTimeboxOffTheList = () => ({ type: "TIMEBOX_FINISH" });
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");

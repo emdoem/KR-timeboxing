@@ -8,7 +8,8 @@ function TimeboxCreator(props) {
         event.preventDefault();
         props.onCreate({
             title: titleInput.current.value,
-            totalTimeInMinutes: totalTimeInMinutesInput.current.value
+            totalTimeInMinutes: totalTimeInMinutesInput.current.value,
+            finished: false
         });
         titleInput.current.value = "";
         totalTimeInMinutesInput.current.value = "";
