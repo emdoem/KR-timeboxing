@@ -19,29 +19,3 @@ export const AllTimeboxesList = connect(
 export const RemainingTimeboxesList = connect(
     (state) => ({ timeboxes: getRemainingTimeboxes(state.timeboxesManager) })
 )(TimeboxesList);
-
-/* 
-custom connect function - replaced by connect()() from react-redux
-that's some nice currying!
-*/
-function connectToRedux(mapStateToProps) {
-    return function (Component) {
-        function ConnectedComponent(props) {
-            const store = useStore();
-            const forceUpdate = useForceUpdate();
-            const state = store.getState().timeboxesManager;
-            useEffect(() => store.subscribe(forceUpdate), []);
-
-            const mappedProps = mapStateToProps(state);
-            const newProps = {
-                ...props,
-                ...mappedProps
-            }
-            return <Component
-                {...newProps}
-            />
-        }
-        return ConnectedComponent;
-    }
-}
-
