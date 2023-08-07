@@ -1,4 +1,5 @@
 import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
+import { getCurrentTimebox } from "./timeboxesReducer";
 
 export const setTimeboxes = timeboxes => ({ type: "TIMEBOXES_SET", timeboxes });
 export const setError = error => ({ type: "ERROR_SET", error });
@@ -10,7 +11,7 @@ export const startEditingTimebox = currentlyEditedTimeboxId => ({ type: "TIMEBOX
 export const stopEditingTimebox = () => ({ type: "TIMEBOX_EDIT_STOP" });
 export const makeTimeboxCurrent = timebox => ({ type: "TIMEBOX_MAKE_CURRENT", timebox });
 export const closeCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_CLOSE" });
-export const finishTimeboxOffTheList = () => ({ type: "TIMEBOX_FINISH" });
+export const finishTimeboxOffTheList = (finishedTimebox) => ({ type: "TIMEBOX_FINISH", finishedTimebox });
 
 // insert custom URL in the call below:
 const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
@@ -43,9 +44,15 @@ export const updateTimeboxRemotely = (timebox, updatedTimebox, accessToken) => d
     dispatch(stopEditingTimebox());
 };
 
+export const finishTimeboxRemotely = (timebox, accessToken) => dispatch => {
+    const updatedTimebox = { ...timebox, finished: true}
+    TimeboxesAPI.replaceTimebox({ ...timebox, ...updatedTimebox }, accessToken)
+        .then(finishedTimebox => dispatch(finishTimeboxOffTheList(finishedTimebox)))
+}
+
 export const runTimer = () => ({ type: "TIMER_RUNNING" });
 export const startTimerAction = () => ({ type: "TIMER_START" });
 export const stopTimerAction = () => ({ type: "TIMER_STOP" });
 export const togglePauseAction = () => ({ type: "PAUSE_TOGGLE" });
 export const resetCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_RESET" });
-export const finishCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_FINISH" });
+// export const finishCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_FINISH" });

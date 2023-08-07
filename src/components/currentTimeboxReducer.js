@@ -26,6 +26,7 @@ export function currentTimeboxReducer(state = initialState, action = {}) {
 export const initialState = {
     isRunning: false,
     isPaused: false,
+    // isFinished is most probably completely unnecessary
     isFinished: false,
     pausesCount: 0,
     elapsedTimeInSeconds: 0,

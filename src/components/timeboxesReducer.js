@@ -11,7 +11,7 @@ export function timeboxesReducer(state = initialState, action = {}) {
             return { ...state, currentTimeboxId: null }
         }
         case "TIMEBOX_FINISH": {
-            const finishedTimebox = {...getCurrentTimebox(state)}
+            const { finishedTimebox } = action;
             if (isAnyTimeboxCurrent(state)) finishedTimebox.finished = true;
             const timeboxes = state.timeboxes.map(timebox => timebox.id === finishedTimebox.id ? finishedTimebox : timebox)
             return { ...state, timeboxes }

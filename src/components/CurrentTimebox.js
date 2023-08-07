@@ -1,4 +1,6 @@
-import React, { useReducer, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
+import AuthenticationContext from '../contexts/AuthenticationContexts';
+
 
 import Clock from "./Clock";
 import ProgressBar from "./ProgressBar";
@@ -16,8 +18,7 @@ import {
     runTimer, 
     togglePauseAction, 
     resetCurrentTimebox, 
-    finishCurrentTimebox, 
-    finishTimeboxOffTheList
+    finishTimeboxRemotely
 } from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,12 +30,15 @@ function CurrentTimebox() {
     const isPaused = useSelector(state => getPauseStatus(state.currentTimebox));
     const isRunning = useSelector(state => getRunningStatus(state.currentTimebox));
     const pausesCount = useSelector(state => getPausesCount(state.currentTimebox));
+    // all 'isFinished' logic is most probably completely unnecessary
     const isFinished = useSelector(state => isTimeboxFinished(state.currentTimebox));
     const elapsedTimeInSeconds = useSelector(state => getElapsedTimeInSeconds(state.currentTimebox));
     //these selectors refer to timeboxesManager part of the state
     const currentTimeboxFromState = useSelector(state => getCurrentTimebox(state.timeboxesManager));
     const title = currentTimeboxFromState ? currentTimeboxFromState.title : null;
     const totalTimeInMinutes = currentTimeboxFromState ? currentTimeboxFromState.totalTimeInMinutes : null;
+
+    const { accessToken } = useContext(AuthenticationContext);
 
     let intervalIdRef = useRef(null);
 
@@ -54,14 +58,9 @@ function CurrentTimebox() {
         }
 
     }
-    // this was a fun one - the issue was, elapsedTimeInSeconds was undefined,
-    // because the selector didn't refer to the proper slice of the state
-    // so the timer never stopped
     useEffect(() => {
         if (timeLeftInSeconds <= 0.001) {
-            // this could be refactored into a single action dispatch
-            dispatch(finishTimeboxOffTheList());
-            dispatch(finishCurrentTimebox());
+            dispatch(finishTimeboxRemotely(currentTimeboxFromState, accessToken));
             dispatch(closeCurrentTimebox())
 
             handleStop();
