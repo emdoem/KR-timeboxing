@@ -107,8 +107,8 @@ function CurrentTimebox() {
                     <button onClick={handleStart} disabled={isRunning || isFinished}>Start</button>
                     <button onClick={handleStop} disabled={!isRunning}>Stop</button>
                     <button onClick={togglePause} disabled={!isRunning}>{isPaused ? "Resume" : "Pause"}</button>
-                    Liczba przerw: {pausesCount}
-                    <button onClick={handleBackToList}>Zamknij</button>
+                    Pauses count: {pausesCount}
+                    <button onClick={handleBackToList}>Close</button>
                 </div> : null}
         </>
     )

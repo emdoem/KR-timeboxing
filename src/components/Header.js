@@ -13,7 +13,7 @@ function Header() {
                         onClick={handleLogout}
                         className="header__logout-link"
                         href="#"
-                    >Wyloguj się</a>}
+                    >Log out</a>}
             </AuthenticationContext.Consumer>
 
         </header>

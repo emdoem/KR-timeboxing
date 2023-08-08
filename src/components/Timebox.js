@@ -10,9 +10,9 @@ function Timebox({title, totalTimeInMinutes, onDelete, onEdit, onMakeCurrent}) {
                 className="Timebox"
             >
                 <h3>{title} - {totalTimeInMinutes} min. </h3>
-                <button onClick={onDelete} >Usuń</button>
-                <button onClick={onEdit} >Zmień</button>
-                <button onClick={onMakeCurrent} >Zacznij teraz</button>
+                <button onClick={onDelete} >Delete</button>
+                <button onClick={onEdit} >Edit</button>
+                <button onClick={onMakeCurrent} >Start now</button>
             </div>
         )
     

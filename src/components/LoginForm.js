@@ -35,14 +35,14 @@ class LoginForm extends React.Component {
                     />
                 </label><br />
                 <label>
-                    hasło 
+                    password 
                     <input 
                         ref={this.passwordInput}
                         type="password" 
                         defaultValue="secret"
                     />
                     </label><br />
-                <button>Zaloguj</button>
+                <button>Log In</button>
             </form>
         )    
     }

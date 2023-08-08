@@ -31,7 +31,7 @@ function TimeboxEditor(props) {
             className="TimeboxCreator"
         >
             <label>
-                Co robisz?
+                What are you doing?
                 <input
                     ref={titleInput}
                     defaultValue={props.initialTitle}
@@ -39,7 +39,7 @@ function TimeboxEditor(props) {
                 />
             </label><br />
             <label>
-                Ile minut?
+                How much time will it take?
                 <input
                     ref={totalTimeInMinutesInput}
                     defaultValue={props.initialTotalTimeInMinutes}
@@ -47,8 +47,8 @@ function TimeboxEditor(props) {
                     step="0.01"
                 />
             </label><br />
-            <a onClick={handleCancel}>Anuluj</a>
-            <button>Zapisz zmiany</button>
+            <a onClick={handleCancel}>Cancel</a>
+            <button>Save</button>
         </form>
     )
 
