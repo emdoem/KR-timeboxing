@@ -1,4 +1,4 @@
-import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
+import TimeboxesAPI from "../api/FakeTimeboxesAPI"
 import { getCurrentTimebox } from "./timeboxesReducer";
 
 export const setTimeboxes = timeboxes => ({ type: "TIMEBOXES_SET", timeboxes });
@@ -14,7 +14,7 @@ export const closeCurrentTimebox = () => ({ type: "CURRENT_TIMEBOX_CLOSE" });
 export const finishTimeboxOffTheList = (finishedTimebox) => ({ type: "TIMEBOX_FINISH", finishedTimebox });
 
 // insert custom URL in the call below:
-const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
+// const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
 export const fetchAllTimeboxes = (accessToken) => (dispatch) => {
     TimeboxesAPI.getAllTimeboxes(accessToken).then(
