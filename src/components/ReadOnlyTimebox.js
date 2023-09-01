@@ -13,7 +13,7 @@ class ReadOnlyTimebox extends React.Component {
         };
         return (
             <div 
-                className="Timebox"
+                className="Timebox finished"
             >
                 <h3>{title} - {totalTimeInMinutes} min. </h3>
                 

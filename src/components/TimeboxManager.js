@@ -5,13 +5,14 @@ import TimeboxCreator from "./TimeboxCreatorFunc";
 import Error from "./ErrorBoundary";
 import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 import AuthenticationContext from '../contexts/AuthenticationContexts';
-import { AllTimeboxesList, RemainingTimeboxesList } from './TimeboxesList';
+import { RemainingTimeboxesList, FinishedTimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import { areTimeboxesLoading, getTimeboxesLoadingError } from './timeboxesReducer';
 import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { EditableTimebox } from './EditableTimebox.1';
+import CurrentTimebox from './CurrentTimebox';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
@@ -70,7 +71,10 @@ function TimeboxManager() {
                     renderTimebox={renderTimebox}
                 />
             </Error>
-
+            <CurrentTimebox/>
+            <FinishedTimeboxesList
+                renderTimebox={renderReadOnlyTimebox}
+            />
 
         </>
     )

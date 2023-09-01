@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
 import TimeboxManager from "./TimeboxManager"
-import CurrentTimebox from "./CurrentTimebox";
 import InspirationalQuote from './InspirationalQuoteFunc';
 
 const headerRoot = document.getElementById("headerRoot");
@@ -14,9 +13,6 @@ function AuthenticatedApp() {
                 <Header />
             </Portal>
             <TimeboxManager />
-            <CurrentTimebox
-                
-            />
             <InspirationalQuote />
         </>
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Error from "./ErrorBoundary";
 import { Timebox } from './TimeboxManager';
-import { getAllTimeboxes, getRemainingTimeboxes } from './timeboxesReducer';
+import { getAllTimeboxes, getFinishedTimeboxes, getRemainingTimeboxes } from './timeboxesReducer';
 
 import { useForceUpdate } from './reduxStore';
 import { connect, useStore } from 'react-redux';
@@ -18,4 +18,8 @@ export const AllTimeboxesList = connect(
 
 export const RemainingTimeboxesList = connect(
     (state) => ({ timeboxes: getRemainingTimeboxes(state.timeboxesManager) })
+)(TimeboxesList);
+
+export const FinishedTimeboxesList = connect(
+    (state) => ({ timeboxes: getFinishedTimeboxes(state.timeboxesManager) })
 )(TimeboxesList);

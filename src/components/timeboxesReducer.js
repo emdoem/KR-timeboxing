@@ -64,6 +64,7 @@ const initialState = {
 
 export const getAllTimeboxes = (state) => state.timeboxes;
 export const getRemainingTimeboxes = state => state.timeboxes.filter(timebox => timebox.id !== state.currentTimeboxId && timebox.finished === false)
+export const getFinishedTimeboxes = state => state.timeboxes.filter(timebox => timebox.id !== state.currentTimeboxId && timebox.finished === true)
 export const areTimeboxesLoading = (state) => state.timeboxesAreLoading;
 export const getTimeboxesLoadingError = (state) => state.timeboxesLoadingError;
 export const isTimeboxEdited = (state, timebox) => state.currentlyEditedTimeboxId && state.currentlyEditedTimeboxId === timebox.id;
