@@ -52,11 +52,15 @@ function TimeboxManager() {
 
     }
 
-    function renderReadOnlyTimebox(timebox, index) {
+    function renderReadOnlyTimebox(timebox) {
+        const onDelete = () => dispatch(removeTimeboxRemotely(timebox, accessToken))
+
         return <ReadOnlyTimebox
             key={timebox.id}
             title={timebox.title}
             totalTimeInMinutes={timebox.totalTimeInMinutes}
+            onDelete={onDelete}
+
         />
     }
 
@@ -67,11 +71,13 @@ function TimeboxManager() {
             {timeboxesLoading ? "Timeboxy się ładują..." : null}
             {timeboxesLoadingError ? "Coś się wykrzaczyło w liście :(" : null}
             <Error message="Coś się wykrzaczyło w liście :(">
+                <p>Remaining Tasks</p>
                 <RemainingTimeboxesList
                     renderTimebox={renderTimebox}
                 />
             </Error>
             <CurrentTimebox/>
+            <p>Finished Tasks</p>
             <FinishedTimeboxesList
                 renderTimebox={renderReadOnlyTimebox}
             />
