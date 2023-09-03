@@ -21,14 +21,14 @@ function TimeboxCreator(props) {
             className="TimeboxCreator"
         >
             <label>
-                Co robisz?
+                What are you doing?
                 <input
                     ref={titleInput}
                     type="text"
                 />
             </label><br />
             <label>
-                Ile minut?
+                How much time will it take?
                 <input
                     ref={totalTimeInMinutesInput}
                     type="number"
@@ -37,7 +37,7 @@ function TimeboxCreator(props) {
             </label><br />
             <button
 
-            >Dodaj Timebox</button>
+            >Add Timebox</button>
         </form>
     )
 

@@ -6,7 +6,7 @@ import AuthenticationContext from '../contexts/AuthenticationContexts';
 function UserGreeting(props) {
     const {accessToken} = useContext(AuthenticationContext);
     return (
-        <>Witaj {getUserEmail(accessToken)}!</>
+        <>Hi {getUserEmail(accessToken)}!</>
     );
 }
 

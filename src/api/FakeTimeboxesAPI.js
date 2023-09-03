@@ -9,15 +9,16 @@ function wait(ms=1000) {
     )
 }
 const timeboxes = [
-    { id: 1, title: "Uczę się list", totalTimeInMinutes: 25 },
-    { id: 2, title: "Uczę się formularzy", totalTimeInMinutes: 15 },
-    { id: 3, title: "Uczę się srutututu", totalTimeInMinutes: 5 },
-    { id: 4, title: "Uczę się życia", totalTimeInMinutes: 2 }
+    { id: 1, title: "Task A", totalTimeInMinutes: 25, finished: false },
+    { id: 2, title: "Task B", totalTimeInMinutes: 15, finished: false },
+    { id: 3, title: "Task C", totalTimeInMinutes: 5, finished: false },
+    { id: 4, title: "Task D", totalTimeInMinutes: 2, finished: false }
+
 ];
 function findIndexById(id) {
     const result = timeboxes.findIndex((timebox) => timebox.id == id);
     if (result < 0) {
-        throw new Error("Timebox o podanym id nie istnieje");
+        throw new Error("Timebox with this id doesn't exist");
     }
     return result;
 }
