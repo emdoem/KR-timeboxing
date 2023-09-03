@@ -3,20 +3,21 @@ import React, { useEffect, useContext, useReducer } from 'react';
 import TimeboxCreator from "./TimeboxCreatorFunc";
 // import Timebox from "./Timebox";
 import Error from "./ErrorBoundary";
-import TimeboxesAPI from "../api/FakeTimeboxesAPI"
+import createTimeboxesAPI from "../api/FetchTimeboxesAPI"
 import AuthenticationContext from '../contexts/AuthenticationContexts';
-import { AllTimeboxesList, RemainingTimeboxesList } from './TimeboxesList';
+import { RemainingTimeboxesList, FinishedTimeboxesList } from './TimeboxesList';
 import ReadOnlyTimebox from './ReadOnlyTimebox';
 import { areTimeboxesLoading, getTimeboxesLoadingError } from './timeboxesReducer';
 import { fetchAllTimeboxes, removeTimeboxRemotely, updateTimeboxRemotely, addTimebox } from './actions';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { EditableTimebox } from './EditableTimebox.1';
+import CurrentTimebox from './CurrentTimebox';
 
 export const Timebox = React.lazy(() => import('./Timebox'));
 
 // insert custom URL in the call below:
-// const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
+const TimeboxesAPI = createTimeboxesAPI("http://localhost:5000/timeboxes/");
 
 function TimeboxManager() {
 
@@ -51,11 +52,15 @@ function TimeboxManager() {
 
     }
 
-    function renderReadOnlyTimebox(timebox, index) {
+    function renderReadOnlyTimebox(timebox) {
+        const onDelete = () => dispatch(removeTimeboxRemotely(timebox, accessToken))
+
         return <ReadOnlyTimebox
             key={timebox.id}
             title={timebox.title}
             totalTimeInMinutes={timebox.totalTimeInMinutes}
+            onDelete={onDelete}
+
         />
     }
 
@@ -66,11 +71,16 @@ function TimeboxManager() {
             {timeboxesLoading ? "Timeboxy się ładują..." : null}
             {timeboxesLoadingError ? "Coś się wykrzaczyło w liście :(" : null}
             <Error message="Coś się wykrzaczyło w liście :(">
+                <p>Remaining Tasks</p>
                 <RemainingTimeboxesList
                     renderTimebox={renderTimebox}
                 />
             </Error>
-
+            <CurrentTimebox/>
+            <p>Finished Tasks</p>
+            <FinishedTimeboxesList
+                renderTimebox={renderReadOnlyTimebox}
+            />
 
         </>
     )
