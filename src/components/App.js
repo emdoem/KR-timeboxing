@@ -3,7 +3,7 @@ import React from 'react';
 import Error from "./ErrorBoundary";
 import ErrorBoundary from './ErrorBoundary';
 import LoginForm from './LoginForm';
-import AuthenticationAPI from "../api/FetchAuthenticationAPI";
+import AuthenticationAPI from "../api/FakeAuthenticationAPI";
 
 // import AuthenticatedApp from './AuthenticatedApp';
 import AuthenticationContext from '../contexts/AuthenticationContexts';
