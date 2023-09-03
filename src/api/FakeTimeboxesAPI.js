@@ -9,10 +9,10 @@ function wait(ms=1000) {
     )
 }
 const timeboxes = [
-    { id: 1, title: "Uczę się list", totalTimeInMinutes: 25, finished: false },
-    { id: 2, title: "Uczę się formularzy", totalTimeInMinutes: 15, finished: false },
-    { id: 3, title: "Uczę się srutututu", totalTimeInMinutes: 5, finished: false },
-    { id: 4, title: "Uczę się życia", totalTimeInMinutes: 2, finished: false }
+    { id: 1, title: "Uczę się list", totalTimeInMinutes: 25 },
+    { id: 2, title: "Uczę się formularzy", totalTimeInMinutes: 15 },
+    { id: 3, title: "Uczę się srutututu", totalTimeInMinutes: 5 },
+    { id: 4, title: "Uczę się życia", totalTimeInMinutes: 2 }
 ];
 function findIndexById(id) {
     const result = timeboxes.findIndex((timebox) => timebox.id == id);
@@ -23,19 +23,19 @@ function findIndexById(id) {
 }
 const FakeTimeboxesAPI = {
     getAllTimeboxes: async function() {
-        await wait(200);
+        await wait(2000);
         // console.log(timeboxes);
         return [...timeboxes];
     },
     addTimebox: async function(timeboxToAdd) {
-        await wait(200);
+        await wait(1000);
         const addedTimebox = {...timeboxToAdd, id: uuidv4()}
         timeboxes.push(addedTimebox);
         // console.log(timeboxes);
         return addedTimebox;
     },
     replaceTimebox: async function(timeboxToReplace) {
-        await wait(200);
+        await wait(1000);
         if (!timeboxToReplace.id) {
             throw new Error("Cannot replace timebox without an id")
         }
@@ -57,7 +57,7 @@ const FakeTimeboxesAPI = {
     },
     */
     removeTimebox: async function(timeboxToRemove) {
-        await wait(200);
+        await wait(1000);
         if (!timeboxToRemove.id) {
             throw new Error("Cannot remove timebox without an id")
         }
