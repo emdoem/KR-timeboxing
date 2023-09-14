@@ -1,6 +1,9 @@
 # Kurs Reacta / React.js course
 Pomodoro-inspired App - a training ground for everything React. A lot is going on and a lot more will probably happen.
 
+Here's a static version of the app: https://emdoem.github.io/KR-timeboxing/
+with REST API experience simulated with setTimeout.
+
 I tried marking most of my custom implementations with comments.
 
 # Getting Started with Create React App
