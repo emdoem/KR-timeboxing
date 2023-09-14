@@ -9,7 +9,7 @@ class ReadOnlyTimebox extends React.Component {
     render () {
         const { title, totalTimeInMinutes, onDelete } = this.props;
         if (totalTimeInMinutes <= 0) {
-            throw new Error("Całkowity czas musi być większy niż zero!");
+            throw new Error("Total time needs to be larger than 0!");
         };
         return (
             <div 

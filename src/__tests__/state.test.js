@@ -14,7 +14,7 @@ describe('timeboxes state changes', () => {
             }
         });
     })
-    test('initially timeboxes are empy', () => {
+    test('initially timeboxes are empty', () => {
         const timeboxes = getAllTimeboxes(store.getState().timeboxesManager);
         expect(timeboxes).toEqual([]);
     });

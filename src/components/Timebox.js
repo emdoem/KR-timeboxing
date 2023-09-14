@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function Timebox({title, totalTimeInMinutes, onDelete, onEdit, onMakeCurrent}) {
         if (totalTimeInMinutes <= 0) {
-            throw new Error("Całkowity czas musi być większy niż zero!");
+            throw new Error("Total time needs to be larger than 0!");
         };
         return (
             <div
