@@ -1,5 +1,11 @@
 # Kurs Reacta / React.js course
-Pomodoro-inspired App - a training ground for everything React. A lot is going on and a lot more will probably happen.
+Pomodoro-inspired App - a training ground for everything React. I did try to clean it up, but some parts are still messy.
+
+Here's a static version of the app: https://emdoem.github.io/KR-timeboxing/
+with REST API experience simulated with setTimeout.
+
+TimeboxManager is the main component - displaying the TimeboxCreator and timeboxes lists (remaining and finished). Timebox lists are using renderProps from TimeboxManager. 
+The state is handled by redux store - with 2 slices: 1st to manage the general timeboxes array, 2nd to handle editing timeboxes in app.
 
 I tried marking most of my custom implementations with comments.
 
